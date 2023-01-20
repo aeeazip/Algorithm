@@ -19,7 +19,8 @@
 단, 이동 횟수는 최소가 되어야 한다.
 
 아래 그림은 원판이 5개인 경우의 예시이다.
-<img src="https://user-images.githubusercontent.com/97737822/213713932-93312f24-5a71-46d2-979b-826396ced7f4.png" width="700" height="200" />
+
+<img src="https://user-images.githubusercontent.com/97737822/213713932-93312f24-5a71-46d2-979b-826396ced7f4.png" width="900" height="300" />
 
 ## 입력
 

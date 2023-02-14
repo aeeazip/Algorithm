@@ -8,7 +8,7 @@
 
 사분면은 아래 그림처럼 1부터 4까지 번호를 갖는다. "Quadrant n"은 "제n사분면"이라는 뜻이다.
 
-<img src="https://user-images.githubusercontent.com/97737822/218620402-5b7cdd70-75b2-4165-a604-775352171fdd.png" width="400" height="150" />
+<img src="https://user-images.githubusercontent.com/97737822/218620402-5b7cdd70-75b2-4165-a604-775352171fdd.png" width="400" height="200" />
  
 예를 들어, 좌표가 (12, 5)인 점 A는 x좌표와 y좌표가 모두 양수이므로 제1사분면에 속한다. 
 

@@ -41,10 +41,23 @@
 21 Dohyun
 ```
 
-### 문제풀이
+## 문제풀이
 
-입력 순서를 유지하는 LinkedHashMap을 활용하여 key값에 이름, value값으로 나이를 저장한다. 
+case 1) 시간 초과 발생 -> 실패
+
+입력 순서를 유지하는 LinkedHashMap을 활용하여 key값에 String 타입의 이름, value값으로 Integer 타입의 나이를 저장한다. 
 
 이후 빈도수(value) 값을 기준으로 compareTo 메소드를 오버라이딩 해서 오름차순 정렬을 해주었고,
 
 map.get(key) + key로 나이와 이름을 순서대로 출력해주었다. 
+
+백준 예제는 정상적으로 출려되었지만 입력의 크기가 커지면 시간 초과가 발생해서 좋은 풀이는 아닌 것 같다. 
+
+
+case 2) 정상 출력 -> 성공
+
+case 1과 거의 똑같지만, HashMap을 사용하고 key로 Integer 타입의 나이, value로 List<String> 타입의 이름을 저장한다. 
+
+case 1에서는 String, Integer 쌍으로 담았다면 case2에서는 Integer, List<String> 쌍으로 담는 것만 다르다고 할 수 있는데
+
+key인 나이를 기준으로 정렬해주면 같은 나이엔 List에 하나씩 추가되기 때문에 입력 순서를 유지하므로 또 정렬해줄 필요가 없다. 

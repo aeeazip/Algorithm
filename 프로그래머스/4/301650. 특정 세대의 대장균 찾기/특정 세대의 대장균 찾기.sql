@@ -1,16 +1,28 @@
--- 3세대
-SELECT ID
-FROM ECOLI_DATA
-WHERE PARENT_ID IN (
-    -- 2세대
-    SELECT ID
-    FROM ECOLI_DATA
-    WHERE PARENT_ID IN (
-        -- 1세대
-        SELECT ID
-        FROM ECOLI_DATA
-        WHERE PARENT_ID IS NULL
-    )
-)
-ORDER BY ID ASC;
+# IN 활용 풀이법
+# -- 3세대
+# SELECT ID
+# FROM ECOLI_DATA
+# WHERE PARENT_ID IN (
+#     -- 2세대
+#     SELECT ID
+#     FROM ECOLI_DATA
+#     WHERE PARENT_ID IN (
+#         -- 1세대
+#         SELECT ID
+#         FROM ECOLI_DATA
+#         WHERE PARENT_ID IS NULL
+#     )
+# )
+# ORDER BY ID ASC;
 
+# JOIN 활용 풀이법
+SELECT ED3.ID
+FROM ECOLI_DATA ED1 JOIN ECOLI_DATA ED2 
+    ON ED1.PARENT_ID IS NULL AND ED1.ID = ED2.PARENT_ID
+JOIN ECOLI_DATA ED3
+    ON ED2.ID = ED3.PARENT_ID
+ORDER BY ED3.ID ASC;
+    
+    
+    
+    

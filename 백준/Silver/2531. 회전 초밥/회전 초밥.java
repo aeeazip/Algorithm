@@ -1,52 +1,51 @@
 import java.util.*;
+import java.io.*;
 
 public class Main {
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        int N = sc.nextInt(); // 접시 수
-        int d = sc.nextInt(); // 초밥 가짓수
-        int k = sc.nextInt(); // 연속해서 먹는 접시 수
-        int c = sc.nextInt(); // 쿠폰 번호
-        
-        int[] belt = new int[N];
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        String[] input = br.readLine().split(" ");
+
+        int N = Integer.parseInt(input[0]); // 벨트에 놓인 접시의 수
+        int d = Integer.parseInt(input[1]); // 초밥 가짓수
+        int k = Integer.parseInt(input[2]); // 연속해서 먹는 접시의 수
+        int c = Integer.parseInt(input[3]); // 쿠폰 번호
+
+        List<String> str = new ArrayList<>();
         for (int i = 0; i < N; i++) {
-            belt[i] = sc.nextInt();
+            str.add(br.readLine());
         }
-        sc.close();
-        
-        Map<Integer, Integer> sushiMap = new HashMap<>();
-        int uniqueCount = 0;
-        
-        // 초기 윈도우 설정 (0~k-1)
-        for (int i = 0; i < k; i++) {
-            sushiMap.put(belt[i], sushiMap.getOrDefault(belt[i], 0) + 1);
+
+        // 첫 번째 윈도우 검사
+        Map<String, Integer> map = new HashMap<>();
+        for(int i = 0; i < k; i++) {
+            map.put(str.get(i), map.getOrDefault(str.get(i), 0) + 1);
         }
-        uniqueCount = sushiMap.size();
-        
-        // 슬라이딩 윈도우
-        int maxCount = uniqueCount;
-        for (int i = 0; i < N; i++) {
-            int removeIdx = i; // 제거할 초밥
-            int addIdx = (i + k) % N; // 추가할 초밥 (회전 고려)
-            
-            // 기존 초밥 제거
-            sushiMap.put(belt[removeIdx], sushiMap.get(belt[removeIdx]) - 1);
-            if (sushiMap.get(belt[removeIdx]) == 0) {
-                sushiMap.remove(belt[removeIdx]);
-                uniqueCount--;
+
+        int max = map.size();
+        if(!map.containsKey(String.valueOf(c))) max++;
+
+        // 나머지 윈도우 검사
+        for(int i = 1; i < N; i++) {
+            // i - 1 삭제
+            if(map.get(str.get(i - 1)) != null) {
+                int n = map.get(str.get(i - 1));
+                if(n == 1) map.remove(str.get(i - 1));
+                else map.put(str.get(i - 1), n - 1);
             }
-            
-            // 새로운 초밥 추가
-            sushiMap.put(belt[addIdx], sushiMap.getOrDefault(belt[addIdx], 0) + 1);
-            if (sushiMap.get(belt[addIdx]) == 1) {
-                uniqueCount++;
+
+            int index = (i + k - 1) % N;
+            map.put(str.get(index), map.getOrDefault(str.get(index), 0) + 1);
+
+            // 쿠폰 포함되어있는지 검사
+            if(!map.containsKey(String.valueOf(c))) {
+                max = Math.max(max, map.size() + 1);
             }
-            
-            // 쿠폰 초밥 추가 고려
-            int currentMax = sushiMap.containsKey(c) ? uniqueCount : uniqueCount + 1;
-            maxCount = Math.max(maxCount, currentMax);
+            else {
+                max = Math.max(max, map.size());
+            }
         }
-        
-        System.out.println(maxCount);
+
+        System.out.print(max);
     }
 }

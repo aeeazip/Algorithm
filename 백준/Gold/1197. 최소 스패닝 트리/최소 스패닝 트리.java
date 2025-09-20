@@ -4,68 +4,80 @@ import java.io.InputStreamReader;
 import java.util.*;
 
 public class Main {
-    public static List<Integer>[] graph;
-    public static int[][] arr;
-    public static int[] parent;
+    public static class Node implements Comparable<Node> {
+        int from;
+        int to;
+        int cost;
 
+        public Node(int from, int to, int cost) {
+            this.from = from;
+            this.to = to;
+            this.cost = cost;
+        }
+
+        @Override
+        public int compareTo(Node n) {
+            return Integer.compare(this.cost, n.cost);
+        }
+    }
+
+    public static List<Node> graph;
+    public static int[] parent;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        int[] input = Arrays.stream(br.readLine().split(" "))
+        int[] info = Arrays.stream(br.readLine().split(" "))
                 .mapToInt(Integer::parseInt)
                 .toArray(); // 정점 개수, 간선 개수
 
-        graph = new ArrayList[input[0] + 1];
-        for (int i = 0; i < input[0] + 1; i++) {
-            graph[i] = new ArrayList<>();
-        }
+       // 크루스칼용
+       parent = new int[info[0] + 1];
+       for(int i = 0; i < info[0] + 1; i++) {
+           parent[i] = i;
+       }
 
-        arr = new int[input[1]][3];
-        for (int i = 0; i < input[1]; i++) {
-            arr[i] = Arrays.stream(br.readLine().split(" "))
-                    .mapToInt(Integer::parseInt)
-                    .toArray();
-        }
+       graph = new ArrayList<>();
+       for(int i = 0; i < info[1]; i++) {
+           int[] input = Arrays.stream(br.readLine().split(" "))
+                   .mapToInt(Integer::parseInt)
+                   .toArray();
 
-        // 가중치를 기준으로 오름차순 정렬
-        Arrays.sort(arr, new Comparator<int[]>() {
-            @Override
-            public int compare(int[] a1, int[] a2) {
-                return Integer.compare(a1[2], a2[2]);
-            }
-        });
+           graph.add(new Node(input[0], input[1], input[2]));
+       }
 
-        int sum = 0;
-        int count = 0;
-        parent = new int[input[0] + 1]; // union find용 배열
+       Collections.sort(graph);
 
-        // 초기화
-        for(int i = 0; i < input[0] + 1; i++) parent[i] = i;
-        for(int i = 0; i < arr.length; i++) {
-            // 사이클 검사
-            if(find(arr[i][0]) != find(arr[i][1])) {
-                union(arr[i][0], arr[i][1]);
-                sum += arr[i][2];
-                count++;
-            }
+       int sum = 0;
+       int count = 0;
 
-            if(count == input[0] - 1) break;
-        }
+       for(Node n : graph) {
+           if(union(n.from, n.to)){
+               sum += n.cost;
+               count++;
 
-        System.out.print(sum);
+               if(count == info[0] - 1) break;
+           }
+       }
+
+       System.out.print(sum);
     }
 
-    // 집합 대표 찾기
-    public static int find(int x) {
-        if(parent[x] == x) return parent[x];
-        return parent[x] = find(parent[x]);
+    public static boolean union(int from, int to) {
+        // 1. 대표 찾기
+        from = find(from);
+        to = find(to);
+
+        // 2. to 대표 from으로 변겯
+        if(from != to) {
+            parent[to] = from;
+            return true;
+        }
+
+        return false;
     }
 
-    // 두 집합 합치기
-    public static void union(int a, int b) {
-        a = find(a);
-        b = find(b);
-
-        if(a != b) parent[b] = a; // b를 a에 합치기
+    public static int find(int v) {
+        if(parent[v] == v) return v;
+        return parent[v] = find(parent[v]);
     }
 }
